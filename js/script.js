@@ -250,6 +250,55 @@ const displayBackgroundImage = (type, backgroundPath) => {
     }
 }
 
+// Display Slider Movie
+const displaySliderMovie = async () => {
+  const { results } = await fecthAPIData('movie/now_playing');
+  
+  results.forEach((movie) => {
+    const div = document.createElement('div')
+    div.classList.add('swiper-slider');
+
+    div.innerHTML = `
+    <a href="movie-details.html?id=${movie.id}">
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+    </a>
+    <h4 class="swiper-rating">
+      <i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(1)}/ 10
+    </h4> 
+    `;
+
+    document.querySelector('.swiper-wrapper').appendChild(div)
+
+    initializeSwiper()
+  });
+  
+}
+
+const initializeSwiper = () => {
+  const swiper = new Swiper('.swiper', {
+    slidesPerView: 1,
+    spaceBetween: 32,
+    freeMode: true,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 2,
+        spaceBetween: 30
+      },
+      700: {
+        slidesPerView: 3,
+        spaceBetween: 40
+      },
+      1200: {
+        slidesPerView: 4,
+        spaceBetween: 50,
+      },
+    }
+  })
+}
 
 
 
@@ -272,6 +321,7 @@ const Init = () => {
     switch (globalState.currentPage){
         case '/':
         case '/index.html':
+            displaySliderMovie()
             displayPopularMovies();
         break;
         case '/shows.html':
@@ -317,4 +367,3 @@ document.addEventListener('DOMContentLoaded', Init)
 
 
 
-// 1540ee2b0c7fb27966e243ea305332d3
