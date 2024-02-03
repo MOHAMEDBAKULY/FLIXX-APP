@@ -128,7 +128,6 @@ const displayMovieDetails = async ()  => {
 </div>
     `
     document.querySelector('#movie-details').appendChild(div);
-    // document.querySelector('#movie-details').appendChild(div);
 }
 
 
@@ -167,7 +166,7 @@ const displayShowDetails = async ()  => {
       <i class="fas fa-star text-primary"></i>
       ${show.vote_average.toFixed(1)}/ 10
     </p>
-    <p class="text-muted">Last Air Date : ${show.last_air_date}</p>
+    <p class="text-muted">Last Air Date: ${show.last_air_date}</p>
     <p>
     ${show.overview}
     </p>
@@ -250,13 +249,22 @@ const displayBackgroundImage = (type, backgroundPath) => {
     }
 }
 
+// Search Movie and Shows
+const searchMovies = async () => {
+    const queryString =  window.location.search;
+    // console.log(queryString)
+    const urlParams = new URLSearchParams(queryString)
+
+    console.log(urlParams.get('type'))
+}
+
 // Display Slider Movie
 const displaySliderMovie = async () => {
   const { results } = await fecthAPIData('movie/now_playing');
   
   results.forEach((movie) => {
-    const div = document.createElement('div')
-    div.classList.add('swiper-slider');
+    const div = document.createElement('div');
+    div.classList.add('swiper-slide');
 
     div.innerHTML = `
     <a href="movie-details.html?id=${movie.id}">
@@ -269,7 +277,7 @@ const displaySliderMovie = async () => {
 
     document.querySelector('.swiper-wrapper').appendChild(div)
 
-    initializeSwiper()
+    initializeSwiper();
   });
   
 }
@@ -277,20 +285,21 @@ const displaySliderMovie = async () => {
 const initializeSwiper = () => {
   const swiper = new Swiper('.swiper', {
     slidesPerView: 1,
-    spaceBetween: 32,
+    spaceBetween: 30,
     freeMode: true,
     loop: true,
     autoplay: {
       delay: 3000,
+      disableOnInteraction: false,
     },
     breakpoints: {
       500: {
         slidesPerView: 2,
-        spaceBetween: 30
+        spaceBetween: 30,
       },
       700: {
         slidesPerView: 3,
-        spaceBetween: 40
+        spaceBetween: 40,
       },
       1200: {
         slidesPerView: 4,
@@ -325,7 +334,7 @@ const Init = () => {
             displayPopularMovies();
         break;
         case '/shows.html':
-          displayPopularTVShows()
+          displayPopularTVShows();
         break;
         case '/movie-details.html':
           displayMovieDetails()
@@ -334,11 +343,11 @@ const Init = () => {
            displayShowDetails()
         break;
         case '/search.html':
-            console.log('Search Page')
+           searchMovies();
         break;
     }
 
-    highlightActiveLinks()
+    highlightActiveLinks();
 }
 
 
